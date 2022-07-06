@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "fa7ecacb-0147-4439-809f-616a38860495",
+		"name": "ToDo's List",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST api ToDo's",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"SUPERNAME\", \"{{$guid}}\");\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							";\r",
+							"\r",
+							"//проверяю, что ответ содержит \"success\": true, \"error\": null\r",
+							"pm.test(\"Object is contained\", () => {\r",
+							"  const expectedObject = {\r",
+							"    \"success\": true, \"error\": null\r",
+							"  };\r",
+							"  pm.expect(pm.response.json()).to.deep.include(expectedObject);\r",
+							"});\r",
+							"\r",
+							"//вынимаю из ответа содержимое с ключем \"todo\"; вынимаю из запроса содержимое с ключем \"todo\". И проверяю что в запросе есть содержимое ответа.\r",
+							"pm.test(\"Check Data\", function () \r",
+							"{\r",
+							"    var jsonData = pm.response.json();\r",
+							"     \r",
+							"        pm.collectionVariables.get(\"DATA\", jsonData.data);\r",
+							"        console.log(\"Responce Data\", jsonData.data)\r",
+							"\r",
+							"        pm.collectionVariables.get(\"TODO\", jsonData.data.todo);\r",
+							"        console.log(\"Responce ToDo\", jsonData.data.todo)\r",
+							"\r",
+							"             var ReqData = pm.collectionVariables.get(\"REQDATA\", JSON.stringify(pm.request.body.raw));\r",
+							"               \r",
+							"             pm.collectionVariables.get(\"REQDATA\", pm.request.body.raw);\r",
+							"             console.log(\"REQDATA\", pm.request.body.raw)\r",
+							"             var ReqToDo = JSON.parse(pm.request.body.raw)\r",
+							"             console.log(\"Request Data\", ReqToDo)\r",
+							"             pm.collectionVariables.get(\"TODO2\", ReqToDo.todo);\r",
+							"            console.log(\"Request ToDo\", ReqToDo.todo)\r",
+							"       \r",
+							"    pm.expect(jsonData.data.todo).to.equal(ReqToDo.todo);          \r",
+							"\r",
+							"//console.log(\"Request ToDo\", ReqToDo.todo)\r",
+							"//console.log(\"Responce ToDo\", jsonData.data.todo)\r",
+							"});\r",
+							"\r",
+							"console.log(\"TEST#1 COMPLETE SUCCESSFULLY\")\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"todo\": \"{{SUPERNAME}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/todos",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST api ToDo's with SUPERNAME",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"SUPERNAME\", \"VO_Ost_123_asd_DSA\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							";\r",
+							"\r",
+							"//проверяю, что ответ содержит \"success\": true, \"error\": null\r",
+							"pm.test(\"Object is contained\", () => {\r",
+							"  const expectedObject = {\r",
+							"    \"success\": true, \"error\": null\r",
+							"  };\r",
+							"  pm.expect(pm.response.json()).to.deep.include(expectedObject);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"//проверяю, что ответ содержит {{SUPERNAME}}\r",
+							"pm.test(\"Check responce body have SUPERNAME\", function () {\r",
+							"        var name = pm.collectionVariables.get(\"SUPERNAME\");\r",
+							"        console.log(\"SUPERNAME\", name)\r",
+							"\r",
+							"            var jsonData = pm.response.json();\r",
+							"            pm.collectionVariables.get(\"TODO\", jsonData.data.todo);\r",
+							"            console.log(\"ToDo\", jsonData.data.todo)\r",
+							"\r",
+							"\r",
+							"    pm.expect(name).to.equal(jsonData.data.todo)\r",
+							"\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"console.log(\"TEST#2 COMPLETE SUCCESSFULLY\")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"todo\": \"{{SUPERNAME}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/todos",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get ToDo's",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//проверяю, что ответ содержит \"success\": true, \"error\": null\r",
+							"pm.test(\"Object is contained\", () => {\r",
+							"  const expectedObject = {\r",
+							"    \"success\": true, \"error\": null\r",
+							"  };\r",
+							"  pm.expect(pm.response.json()).to.deep.include(expectedObject);\r",
+							"});\r",
+							"\r",
+							"// проверяю, есть ли в массиве todo \"SUPERNAME\" из POST с делом заданым вручную\r",
+							"pm.test(\"Check Data after POST\", function () {\r",
+							"    var name = pm.collectionVariables.get(\"SUPERNAME\");\r",
+							"    console.log(\"SUPERNAME\", name)\r",
+							"    \r",
+							"    var jsonData = pm.response.json();\r",
+							"    var RespData = pm.collectionVariables.get(\"data\", jsonData.data);\r",
+							"    console.log(\"DATA\", RespData)\r",
+							"\r",
+							"        var isFound = false\r",
+							"    for (var i = 0; i < RespData.length; i = i + 1) {\r",
+							"    //   console.log(RespData[i].todo)\r",
+							"        if (RespData[i].todo == name) {\r",
+							"            isFound = true\r",
+							"        }\r",
+							"    }\r",
+							"    pm.expect(isFound).to.equal(true)\r",
+							"    pm.expect(RespData).to.be.an(\"array\");\r",
+							"    console.log(isFound)\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"console.log(\"TEST#3 COMPLETE SUCCESSFULLY\")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/todos",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"todos"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "SUCCESS",
+			"value": ""
+		},
+		{
+			"key": "ERROR",
+			"value": ""
+		},
+		{
+			"key": "DATA",
+			"value": ""
+		},
+		{
+			"key": "SUCCESS1",
+			"value": ""
+		},
+		{
+			"key": "SUPERNAME",
+			"value": ""
+		},
+		{
+			"key": "TODO",
+			"value": ""
+		},
+		{
+			"key": "REQDATA",
+			"value": ""
+		},
+		{
+			"key": "RESD",
+			"value": ""
+		},
+		{
+			"key": "data",
+			"value": ""
+		},
+		{
+			"key": "data2",
+			"value": ""
+		},
+		{
+			"key": "todo",
+			"value": ""
+		},
+		{
+			"key": {
+				"todo": "2d93bcc3-3919-4bd0-9b59-6fe898ec8c2c"
+			},
+			"value": ""
+		}
+	]
+}
